@@ -1,4 +1,4 @@
-library mpm;
+library mpm_event;
 // event
 export './src/event.dart';
 export './src/off_event.dart';

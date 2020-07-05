@@ -27,9 +27,9 @@
 
 ## 1.2 事件总线  
 &emsp;&emsp;全局事件总线，用以跨页面事件通知；实现了订阅者模式，包含发布者和订阅者两种角色，可以通过事件总线来触发事件和监听事件；通过顶级变量*$eventBus*或*factory EventBus()*方法获取全局唯一实例。  
-&emsp;&emsp;* 注册：调用以*on*开头的方法注册事件监听；  
-&emsp;&emsp;* 事件发布：调用以*emit*开头的方法发布事件；  
-&emsp;&emsp;* 注销：调用*off*、*offEvent*或注册返回函数注销事件监听；  
+&emsp;&emsp;- 注册：调用以*on*开头的方法注册事件监听；  
+&emsp;&emsp;- 事件发布：调用以*emit*开头的方法发布事件；  
+&emsp;&emsp;- 注销：调用*off*、*offEvent*或注册返回函数注销事件监听；  
 &emsp;&emsp;示例：  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
@@ -113,5 +113,5 @@
     $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
   ```
 ### 1.2.3 EventBusManager、EventBusState和EventBusStateMixin  
-&emsp;&emsp;*EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；  
-&emsp;&emsp;*EventBusState*和*EventBusStateMixin*：包含一个*EventBusManager*属性*eventBus*，通过*eventBus*可以向*EventBus*上注册回调；重载了*State*的*dispose*方法，以便在系统调用*State*的*dispose*方法释放资源的时候，自动注销掉所有通过*eventBus*注册到*EventBus*上的回调函数。  
+&emsp;&emsp;- *EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；  
+&emsp;&emsp;- *EventBusState*和*EventBusStateMixin*：包含一个*EventBusManager*属性*eventBus*，通过*eventBus*可以向*EventBus*上注册回调；重载了*State*的*dispose*方法，以便在系统调用*State*的*dispose*方法释放资源的时候，自动注销掉所有通过*eventBus*注册到*EventBus*上的回调函数。  
