@@ -13,12 +13,12 @@
 ### 1.1.2 注册  
 &emsp;&emsp;通过如下方法注册事件： 
   ```dart
-    someEvent.handlers += someCallback;  
+    someEvent.on(someCallback);  
   ```
 ### 1.1.3 注销  
-&emsp;&emsp;通过如下方法注销事件：  
+&emsp;&emsp;调用如下方法或注册时返回的函数注销事件：  
   ```dart
-    someEvent.handlers -= someCallback;  
+    someEvent.off(someCallback);  
   ```
 ### 1.1.4 发布  
 &emsp;&emsp;*Event*本身为可调用对象，调用其本身即可发布事件，命名参数*async*用来决定发布同步事件还是异步事件，默认为同步事件。  
