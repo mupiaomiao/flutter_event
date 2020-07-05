@@ -113,5 +113,36 @@
     $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
   ```
 ### 1.2.3 EventBusManager、EventBusState和EventBusStateMixin  
-&emsp;&emsp;- *EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；  
+&emsp;&emsp;- *EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；例如：  
+  ```dart
+    class _SomeWidgetState extends State<SomeWidget> {
+      final eventBusManager = EventBusManager();  
+ 
+      @override
+      void initState() {
+        super.initState();
+        eventBusManager.onData(onInt);
+        eventBusManager.onEvent("test", onTest);
+        eventBusManager.onEventWithArg("test", onTestWithData);
+      }
+ 
+      void onInt(int value) {
+        ...
+      }
+ 
+      void onTest(String event) {
+        ...
+      }
+ 
+      void onTestWithData(String event, String data) {
+        ...
+      }
+ 
+      @override
+      void dispose() {
+        super.dispose();
+        eventBusManager.dispose();
+      }
+    }
+  ```  
 &emsp;&emsp;- *EventBusState*和*EventBusStateMixin*：包含一个*EventBusManager*属性*eventBus*，通过*eventBus*可以向*EventBus*上注册回调；重载了*State*的*dispose*方法，以便在系统调用*State*的*dispose*方法释放资源的时候，自动注销掉所有通过*eventBus*注册到*EventBus*上的回调函数。  
