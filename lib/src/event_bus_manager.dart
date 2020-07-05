@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 
 /// * 通过EventBus注册的回调，在对象销毁时，需要对每个callback
 /// 调用off或者offEvent方法来注销，如果注册的callback很多，
-/// 这将是一项繁琐的工作，并容易出错。
+/// 这将是一项繁琐的工作，并容易出错而导致内存泄漏。
 /// 
 /// * EventBusManager是对EventBus的封装，它持有每个callback的
 /// 注销回调，在其dispose的时候注销掉所有通过它注册的callback。

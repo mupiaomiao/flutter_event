@@ -26,10 +26,10 @@
 &emsp;&emsp;- 异步事件：`someEvent(arg, async: true);`  
 
 ## 1.2 事件总线  
-&emsp;&emsp;全局事件总线，用以跨页面事件通知；实现了订阅者模式，包含发布者和订阅者两种角色，可以通过事件总线来触发事件和监听事件；通过顶级变量*$eventBus*或*factory EventBus()*方法获取全局唯一实例。  
-&emsp;&emsp;- 注册：调用以*on*开头的方法注册事件监听；  
-&emsp;&emsp;- 事件发布：调用以*emit*开头的方法发布事件；  
-&emsp;&emsp;- 注销：调用*off*、*offEvent*或注册返回函数注销事件监听；  
+&emsp;&emsp;全局事件总线，用以跨页面事件通知；实现了订阅者模式，包含发布者和订阅者两种角色，可以通过事件总线来触发事件和监听事件；通过顶级变量*$eventBus*或*factory EventBus()*方法获取全局单例。  
+&emsp;&emsp;- 事件注册：调用以*on*开头的方法注册事件监听；  
+&emsp;&emsp;- 事件注销：调用*off*、*offEvent*或事件注册时返回的函数注销事件监听；  
+&emsp;&emsp;- 事件发布：调用以*emit*开头的方法发布事件；该类方法的的命名参数*async*，用来指定是发布同步还是异步事件；  
 &emsp;&emsp;示例：  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
