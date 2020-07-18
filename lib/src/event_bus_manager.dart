@@ -4,12 +4,12 @@ import './off_event.dart';
 import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
-/// * 通过EventBus注册的回调，在对象销毁时，需要对每个callback
-/// 调用off或者offEvent方法来注销，如果注册的callback很多，
-/// 这将是一项繁琐的工作，并容易出错而导致内存泄漏。
+/// * The callbacks registered on EventBus should be unregistered one by one when they
+/// are no needed any more. It is a heavy work if there are many callbacks. And will lead 
+/// to memory leaks if forgot unregistering any one callback.
 /// 
-/// * EventBusManager是对EventBus的封装，它持有每个callback的
-/// 注销回调，在其dispose的时候注销掉所有通过它注册的callback。
+/// * An EventBusManager instance can release all callbacks were registered on EventBus 
+/// through it when call its `dispose`.
 /// 
 /// {@tool}
 /// 
@@ -26,15 +26,15 @@ import 'package:flutter/foundation.dart';
 ///   }
 /// 
 ///   void onInt(int value) {
-///     ...
+///     // some codes
 ///   }
 /// 
 ///   void onTest(String event) {
-///     ...
+///     // some codes
 ///   }
 /// 
 ///   void onTestWithData(String event, String data) {
-///     ...
+///     // some codes
 ///   }
 /// 
 ///   @override
@@ -50,13 +50,11 @@ import 'package:flutter/foundation.dart';
 class EventBusManager {
   EventBusManager();
   
-  Async get async => $eventBus.async;
+  AsyncEmitter get async => $eventBus.async;
 
-  /// 注销callback
   void off(Function callback) 
     => offEvent(_NULL.Event, callback);
 
-  /// 注销event下的callback
   void offEvent(Object event, Function callback) {
     _debugCheckHasDisposed();
     _offEvents[_Key(event, callback)]?.call();

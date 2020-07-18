@@ -69,8 +69,8 @@ final $eventBus = EventBus();
 /// ```
 /// 可以接收到如下事件：
 /// ```dart
-/// $eventBus.emit3Data(2, 'Good', 33.9);
 /// $eventBus.emit3Data(22, "Hi", 33.0);
+/// $eventBus.emit3Data(2, 'Good', 33.9);
 /// ```
 /// 但不能接收到以下事件：
 /// ```dart
@@ -104,7 +104,7 @@ final $eventBus = EventBus();
 /// ```
 @sealed
 class EventBus {
-  final Async async = Async._();
+  final async = AsyncEmitter._();
 
   factory EventBus() => _singleton;
 
@@ -117,131 +117,131 @@ class EventBus {
     => _offEvents[_Key(event, callback)]?.call();
 
   OffEvent on(void callback()) {
-    _debugCheckRegisteringNullCallback('on', callback);
+    _debugCheckNullCallback('on', callback);
     const evt = _Event<_NULL>(_NULL.Event);
     return _on(evt, _VoidCallback(callback));
   }
 
   OffEvent onData<D>(void callback(D data)) {
-    _debugCheckRegisteringNullCallback('onData', callback);
+    _debugCheckNullCallback('onData', callback);
     final evt = _Event1<_NULL,D>(_NULL.Event);
     return _on(evt, _DataCallback<D>(callback));
   }
 
   OffEvent on2Data<D1,D2>(void callback(D1 data1, D2 data2)) {
-    _debugCheckRegisteringNullCallback('on2Data', callback);
+    _debugCheckNullCallback('on2Data', callback);
     final evt = _Event2<_NULL,D1,D2>(_NULL.Event);
     return _on(evt, _DataCallback2<D1,D2>(callback));
   }
 
   OffEvent on3Data<D1,D2,D3>(void callback(D1 data1, D2 data2, D3 data3)) {
-    _debugCheckRegisteringNullCallback('on3Data', callback);
+    _debugCheckNullCallback('on3Data', callback);
     final evt = _Event3<_NULL,D1,D2,D3>(_NULL.Event);
     return _on(evt, _DataCallback3<D1,D2,D3>(callback));
   }
 
   OffEvent on4Data<D1,D2,D3,D4>(void callback(D1 data1, D2 data2, D3 data3, D4 data4)) {
-    _debugCheckRegisteringNullCallback('on4Data', callback);
+    _debugCheckNullCallback('on4Data', callback);
     final evt = _Event4<_NULL,D1,D2,D3,D4>(_NULL.Event);
     return _on(evt, _DataCallback4<D1,D2,D3,D4>(callback));
   }
   
   OffEvent on5Data<D1,D2,D3,D4,D5>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5)) {
-    _debugCheckRegisteringNullCallback('on5Data', callback);
+    _debugCheckNullCallback('on5Data', callback);
     final evt = _Event5<_NULL,D1,D2,D3,D4,D5>(_NULL.Event);
     return _on(evt, _DataCallback5<D1,D2,D3,D4,D5>(callback));
   }
 
   OffEvent on6Data<D1,D2,D3,D4,D5,D6>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6)) {
-    _debugCheckRegisteringNullCallback('on6Data', callback);
+    _debugCheckNullCallback('on6Data', callback);
     final evt = _Event6<_NULL,D1,D2,D3,D4,D5,D6>(_NULL.Event);
     return _on(evt, _DataCallback6<D1,D2,D3,D4,D5,D6>(callback));
   }
 
   OffEvent on7Data<D1,D2,D3,D4,D5,D6,D7>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7)) {
-    _debugCheckRegisteringNullCallback('on7Data', callback);
+    _debugCheckNullCallback('on7Data', callback);
     final evt = _Event7<_NULL,D1,D2,D3,D4,D5,D6,D7>(_NULL.Event);
     return _on(evt, _DataCallback7<D1,D2,D3,D4,D5,D6,D7>(callback));
   }
 
   OffEvent on8Data<D1,D2,D3,D4,D5,D6,D7,D8>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8)) {
-    _debugCheckRegisteringNullCallback('on8Data', callback);
+    _debugCheckNullCallback('on8Data', callback);
     final evt = _Event8<_NULL,D1,D2,D3,D4,D5,D6,D7,D8>(_NULL.Event);
     return _on(evt, _DataCallback8<D1,D2,D3,D4,D5,D6,D7,D8>(callback));
   }
 
   OffEvent on9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9)) {
-    _debugCheckRegisteringNullCallback('on9Data', callback);
+    _debugCheckNullCallback('on9Data', callback);
     final evt = _Event9<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event);
     return _on(evt, _DataCallback9<D1,D2,D3,D4,D5,D6,D7,D8,D9>(callback));
   }
 
   OffEvent onEvent<E>(E event, void callback(E event)) {
-    _debugCheckRegisteringNullEvent('onEvent', event);
-    _debugCheckRegisteringNullCallback('onEvent', callback);
+    _debugCheckNullEvent('onEvent', event);
+    _debugCheckNullCallback('onEvent', callback);
     final evt = _Event<E>(event);
     return _on(evt, _EventCallback<E>(callback));
   }
 
   OffEvent onEventWithArg<E,A>(E event, void callback(E event, A arg)) {
-    _debugCheckRegisteringNullEvent('onEventWithArg', event);
-    _debugCheckRegisteringNullCallback('onEventWithArg', callback);
+    _debugCheckNullEvent('onEventWithArg', event);
+    _debugCheckNullCallback('onEventWithArg', callback);
     final evt = _Event1<E,A>(event);
     return _on(evt, _EventWithArgCallback<E,A>(callback));
   }
 
   OffEvent onEventWith2Args<E,A1,A2>(E event, void callback(E event, A1 arg1, A2 arg2)) {
-    _debugCheckRegisteringNullEvent('onEventWith2Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith2Args', callback);
+    _debugCheckNullEvent('onEventWith2Args', event);
+    _debugCheckNullCallback('onEventWith2Args', callback);
     final evt = _Event2<E,A1,A2>(event);
     return _on(evt, _EventWith2ArgsCallback<E,A1,A2>(callback));
   }
 
   OffEvent onEventWith3Args<E,A1,A2,A3>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3)) {
-    _debugCheckRegisteringNullEvent('onEventWith3Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith3Args', callback);
+    _debugCheckNullEvent('onEventWith3Args', event);
+    _debugCheckNullCallback('onEventWith3Args', callback);
     final evt = _Event3<E,A1,A2,A3>(event);
     return _on(evt, _EventWith3ArgsCallback<E,A1,A2,A3>(callback));
   }
 
   OffEvent onEventWith4Args<E,A1,A2,A3,A4>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4)) {
-    _debugCheckRegisteringNullEvent('onEventWith4Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith4Args', callback);
+    _debugCheckNullEvent('onEventWith4Args', event);
+    _debugCheckNullCallback('onEventWith4Args', callback);
     final evt = _Event4<E,A1,A2,A3,A4>(event);
     return _on(evt, _EventWith4ArgsCallback<E,A1,A2,A3,A4>(callback));
   }
 
   OffEvent onEventWith5Args<E,A1,A2,A3,A4,A5>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5)) {
-    _debugCheckRegisteringNullEvent('onEventWith5Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith5Args', callback);
+    _debugCheckNullEvent('onEventWith5Args', event);
+    _debugCheckNullCallback('onEventWith5Args', callback);
     final evt = _Event5<E,A1,A2,A3,A4,A5>(event);
     return _on(evt, _EventWith5ArgsCallback<E,A1,A2,A3,A4,A5>(callback));
   }
 
   OffEvent onEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6)) {
-    _debugCheckRegisteringNullEvent('onEventWith6Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith6Args', callback);
+    _debugCheckNullEvent('onEventWith6Args', event);
+    _debugCheckNullCallback('onEventWith6Args', callback);
     final evt = _Event6<E,A1,A2,A3,A4,A5,A6>(event);
     return _on(evt, _EventWith6ArgsCallback<E,A1,A2,A3,A4,A5,A6>(callback));
   }
 
   OffEvent onEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7)) {
-    _debugCheckRegisteringNullEvent('onEventWith7Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith7Args', callback);
+    _debugCheckNullEvent('onEventWith7Args', event);
+    _debugCheckNullCallback('onEventWith7Args', callback);
     final evt = _Event7<E,A1,A2,A3,A4,A5,A6,A7>(event);
     return _on(evt, _EventWith7ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7>(callback));
   }
 
   OffEvent onEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8)) {
-    _debugCheckRegisteringNullEvent('onEventWith8Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith8Args', callback);
+    _debugCheckNullEvent('onEventWith8Args', event);
+    _debugCheckNullCallback('onEventWith8Args', callback);
     final evt = _Event8<E,A1,A2,A3,A4,A5,A6,A7,A8>(event);
     return _on(evt, _EventWith8ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8>(callback));
   }
 
   OffEvent onEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9)) {
-    _debugCheckRegisteringNullEvent('onEventWith9Args', event);
-    _debugCheckRegisteringNullCallback('onEventWith9Args', callback);
+    _debugCheckNullEvent('onEventWith9Args', event);
+    _debugCheckNullCallback('onEventWith9Args', callback);
     final evt = _Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event);
     return _on(evt, _EventWith9ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(callback));
   }
@@ -329,7 +329,6 @@ class EventBus {
   EventBus._();
 
   static final _singleton = new EventBus._();
-
   final _offEvents = new Map<_Key, OffEvent>();
   final _callbacks = new Map<_IEvent, Set<_ICallback>>();
 
@@ -345,7 +344,7 @@ class EventBus {
     assert((){
       var log = 'EventBus: register ${callback.callback}';
       log += event.event == _NULL.Event ? '.' : ' for event "${event.event}".';
-      debugPrint(log);
+      print(log);
       return true;
     }());
     return _offEvents.putIfAbsent(key, () => () {
@@ -357,7 +356,7 @@ class EventBus {
       assert((){
         var log = 'EventBus: unregister ${callback.callback}';
         log += event.event == _NULL.Event ? '.' : ' for event "${event.event}".';
-        debugPrint(log);
+        print(log);
         return true;
       }());
     });
@@ -369,6 +368,16 @@ class EventBus {
     final callbacks = _callbacks[evt]?.toList();
     if (callbacks?.isEmpty ?? true) return;
     callbacks.forEach((callback) => _invoke(callback, evt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+  }
+
+  void _emitAsync<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
+    final evt = _Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event);
+    // 防止稍后发布事件时回调不一致和回调中移除报错
+    final callbacks = _callbacks[evt]?.toList();
+    if (callbacks?.isEmpty ?? true) return;
+    Future((){
+      callbacks.forEach((callback) => _invoke(callback, evt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
+    });
   }
 
   void _invoke(_ICallback callback, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
@@ -391,7 +400,7 @@ class EventBus {
     }
   }
 
-  static void _debugCheckRegisteringNullCallback(String methodName, Function callback) {
+  static void _debugCheckNullCallback(String methodName, Function callback) {
     assert((){
       if (callback == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
@@ -402,11 +411,11 @@ class EventBus {
     }());
   }
 
-  static void _debugCheckRegisteringNullEvent(String methodName, dynamic event) {
+  static void _debugCheckNullEvent(String methodName, dynamic event) {
     assert((){
       if (event == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('''EventBus.$methodName tried to register callback on null event.''')
+          ErrorSummary('''EventBus.$methodName tried to register a null event.''')
         ]);
       }
       return true;
@@ -417,87 +426,87 @@ class EventBus {
 // An OffEvent doing nothing.
 void _offEvent() {}
 
-class Async {
-  const Async._();
+class AsyncEmitter {
+  const AsyncEmitter._();
 
-  Future<void> emit() async {
-    await emitData<_NULL>(null);
+  void emit() {
+    emitData<_NULL>(null);
   }
 
-  Future<void> emitData<D>(D data) async {
-    await emit2Data<D,_NULL>(data, null);
+  void emitData<D>(D data) {
+    emit2Data<D,_NULL>(data, null);
   }
 
-  Future<void> emit2Data<D1,D2>(D1 data1, D2 data2) async {
-    await emit3Data<D1,D2,_NULL>(data1, data2, null);
+  void emit2Data<D1,D2>(D1 data1, D2 data2) {
+    emit3Data<D1,D2,_NULL>(data1, data2, null);
   }
 
-  Future<void> emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) async {
-    await emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
+  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) {
+    emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
   }
 
-  Future<void> emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) async {
-    await emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
+  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) {
+    emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
   }
 
-  Future<void> emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) async {
-    await emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
+  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) {
+    emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
   }
 
-  Future<void> emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) async {
-    await emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
+  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) {
+    emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
   }
 
-  Future<void> emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) async {
-    await emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
+  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) {
+    emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
   }
 
-  Future<void> emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) async {
-    await emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
+  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) {
+    emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
   }
 
-  Future<void> emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) async {
-    await emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
+  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) {
+    emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
   }
 
-  Future<void> emitEvent<E>(E event) async {
-    await emitEventWithArg<E,_NULL>(event, null);
+  void emitEvent<E>(E event) {
+    emitEventWithArg<E,_NULL>(event, null);
   }
 
-  Future<void> emitEventWithArg<E,A>(E event, A arg) async {
-    await emitEventWith2Args<E,A,_NULL>(event, arg, null);
+  void emitEventWithArg<E,A>(E event, A arg) {
+    emitEventWith2Args<E,A,_NULL>(event, arg, null);
   }
 
-  Future<void> emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) async {
-    await emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
+  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) {
+    emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
   }
 
-  Future<void> emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) async {
-    await emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
+  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) {
+    emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
   }
 
-  Future<void> emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) async {
-    await emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
+  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
+    emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
   }
 
-  Future<void> emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) async {
-    await emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
+  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
+    emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
   }
 
-  Future<void> emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) async {
-    await emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
+  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
+    emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
   }
 
-  Future<void> emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) async {
-    await emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
+  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
+    emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
   }
 
-  Future<void> emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) async {
-    await emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
+  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
+    emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
   }
 
-  Future<void> emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) async {
-    EventBus._singleton.emitEventWith9Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
+    EventBus._singleton._emitAsync(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
   }
 }
 
