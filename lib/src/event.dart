@@ -32,7 +32,7 @@ class Event {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, handler));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, handler));
       });
     }
@@ -64,7 +64,7 @@ class Event1<A> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg)));
       });
     }
@@ -96,7 +96,7 @@ class Event2<A1,A2> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2)));
       });
     }
@@ -128,7 +128,7 @@ class Event3<A1,A2,A3> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3)));
       });
     }
@@ -160,7 +160,7 @@ class Event4<A1,A2,A3,A4> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4)));
       });
     }
@@ -192,7 +192,7 @@ class Event5<A1,A2,A3,A4,A5> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5)));
       });
     }
@@ -224,7 +224,7 @@ class Event6<A1,A2,A3,A4,A5,A6> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6)));
       });
     }
@@ -256,7 +256,7 @@ class Event7<A1,A2,A3,A4,A5,A6,A7> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7)));
       });
     }
@@ -288,7 +288,7 @@ class Event8<A1,A2,A3,A4,A5,A6,A7,A8> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)));
       });
     }
@@ -320,7 +320,7 @@ class Event9<A1,A2,A3,A4,A5,A6,A7,A8, A9> {
     if (async == false) {
       handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)));
     } else {
-      scheduleMicrotask((){
+      Future((){
         handlers.forEach((handler) => _invoke(this, ()=>handler(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)));
       });
     }
