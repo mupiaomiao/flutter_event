@@ -72,7 +72,7 @@
     final offEvent9 = someEventWith9Args.on(someCallbackWith9Args);
   ```
 ## 1.3 Fire events  
-&emsp;&emsp;You can fire events synchronously or asynchronously.
+&emsp;&emsp;You can fire events synchronously or asynchronously.  
 &emsp;&emsp;- Fire an event synchronously:  
   ```dart
     someEvent();  // fire an event without argument synchronously.
