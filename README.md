@@ -115,10 +115,10 @@
   ```
 
 # 2. EventBus  
-&emsp;&emsp;EventBus can fire events cross pages. You can hold the global single instance by the top level variable `$eventBus` or calling `factory EventBus()`.  
-&emsp;&emsp;- registering: call the methods beginning with *on* to register callbacks.  
-&emsp;&emsp;- unregistering: call the *off* method or the *offEvent* method to unregister callbacks.  
-&emsp;&emsp;- firing events: call the methods beginning with *emit* to fire events synchronously, call the `$eventBus.async`'s methods to fire events asynchronously.  
+&emsp;&emsp;EventBus can fire events cross pages and components. You can hold the global single instance by the top level variable `$eventBus` or calling `factory EventBus()`.  
+&emsp;&emsp;- Registering: Call methods beginning with `on` to register a callback. Callbacks registered by methods such as `on`, `onData`, `on2Data` and so on can receive events with arguments, they recognize the event by the number, type and order of the arguments the event took. Callbacks registered by methods such as `onEvent`, `onEventWithArg`, `onEventWith2Args` and so on can receive events with identifier(the `event` parameter) and arguments, they recognize the event by the identifier and the number, type and order of the arguments the event took.  
+&emsp;&emsp;- Unregistering: Call the `off` method to unregister a callback which receives unidentified events, and call the `offEvent` method to unregister a callback which receives identifed events.  
+&emsp;&emsp;- Firing events: Call the methods beginning with `emit` to fire events synchronously, call the `$eventBus.async`'s methods to fire events asynchronously.  
 &emsp;&emsp;Example：  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
