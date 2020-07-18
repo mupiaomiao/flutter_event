@@ -29,7 +29,7 @@
 &emsp;&emsp;全局事件总线，用以跨页面事件通知；实现了订阅者模式，包含发布者和订阅者两种角色，可以通过事件总线来触发事件和监听事件；通过顶级变量*$eventBus*或*factory EventBus()*方法获取全局单例。  
 &emsp;&emsp;- 事件注册：调用以*on*开头的方法注册事件监听；  
 &emsp;&emsp;- 事件注销：调用*off*、*offEvent*或事件注册时返回的函数注销事件监听；  
-&emsp;&emsp;- 事件发布：调用以*emit*开头的方法发布事件；该类方法的的命名参数*async*，用来指定是发布同步还是异步事件；  
+&emsp;&emsp;- 事件发布：调用以*emit*开头的方法发布事件；调用*eventBus.async*的以*emit*开头的方法，发布异步事件；  
 &emsp;&emsp;示例：  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
@@ -80,12 +80,14 @@
   ```
 &emsp;&emsp;可以接收到如下事件：  
   ```dart
-    $eventBus.emit3Data(2, 'Good', 33.9);
     $eventBus.emit3Data(22, "Hi", 33.0);
+    $eventBus.emit3Data(2, 'Good', 33.9);
+    $eventBus.async.emit3Data(33, 'Wo', 99.0);
   ```
 &emsp;&emsp;但不能接收到以下事件：  
   ```dart
     $eventBus.emit3Data(1, 1, 1);
+    $eventBus.async.emit3Data(1, 1, 1);
     $eventBus.emit3Data('Hi', 1, 23.0);
     $eventBus.emit3Data(22.0, "Hi", 33);
     $eventBus.emit4Data(1, 'Hi', 12.0, 44);
@@ -103,6 +105,7 @@
   ```dart
     $eventBus.emitEventWith3Args("test", 12, "Hi", 33.5);
     $eventBus.emitEventWith3Args("test", 22, "Good", 102.0);
+    $eventBus.async.emitEventWith3Args("test", 12, "Goods", 44.0);
   ```
 &emsp;&emsp;但不能接收到以下事件：  
   ```dart
@@ -111,6 +114,7 @@
     $eventBus.emitEventWith3Args("test", "Hi", 12, 33.5);
     $eventBus.emitEventWith3Args("Test", "Hi", 12, 33.5);
     $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
+    $eventBus.async.emit4Data("test", 12, "Hi", 33.9);
   ```
 ### 1.2.3 EventBusManager、EventBusState和EventBusStateMixin  
 &emsp;&emsp;- *EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；例如：  

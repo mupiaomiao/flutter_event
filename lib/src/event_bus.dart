@@ -104,6 +104,8 @@ final $eventBus = EventBus();
 /// ```
 @sealed
 class EventBus {
+  final Async async = Async._();
+
   factory EventBus() => _singleton;
 
   /// 注销callback
@@ -244,108 +246,84 @@ class EventBus {
     return _on(evt, _EventWith9ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(callback));
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit({bool async = true}) {
-    emitData<_NULL>(null, async: async);
+  void emit() {
+    emitData<_NULL>(null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitData<D>(D data, {bool async = true}) {
-    emit2Data<D,_NULL>(data, null, async: async);
+  void emitData<D>(D data) {
+    emit2Data<D,_NULL>(data, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit2Data<D1,D2>(D1 data1, D2 data2, {bool async = true}) {
-    emit3Data<D1,D2,_NULL>(data1, data2, null, async: async);
+  void emit2Data<D1,D2>(D1 data1, D2 data2) {
+    emit3Data<D1,D2,_NULL>(data1, data2, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3, {bool async = true}) {
-    emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null, async: async);
+  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) {
+    emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4, {bool async = true}) {
-    emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null, async: async);
+  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) {
+    emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, {bool async = true}) {
-    emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null, async: async);
+  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) {
+    emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, {bool async = true}) {
-    emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null, async: async);
+  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) {
+    emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, {bool async = true}) {
-    emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null, async: async);
+  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) {
+    emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, {bool async = true}) {
-    emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null, async: async);
+  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) {
+    emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9, {bool async = true}) {
-    emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9, async: async);
+  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) {
+    emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEvent<E>(E event, {bool async = true}) {
-    emitEventWithArg<E,_NULL>(event, null, async: async);
+  void emitEvent<E>(E event) {
+    emitEventWithArg<E,_NULL>(event, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWithArg<E,A>(E event, A arg, {bool async = true}) {
-    emitEventWith2Args<E,A,_NULL>(event, arg, null, async: async);
+  void emitEventWithArg<E,A>(E event, A arg) {
+    emitEventWith2Args<E,A,_NULL>(event, arg, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2, {bool async = true}) {
-    emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null, async: async);
+  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) {
+    emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3, {bool async = true}) {
-    emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null, async: async);
+  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) {
+    emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, {bool async = true}) {
-    emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null, async: async);
+  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
+    emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, {bool async = true}) {
-    emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null, async: async);
+  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
+    emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, {bool async = true}) {
-    emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null, async: async);
+  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
+    emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, {bool async = true}) {
-    emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null, async: async);
+  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
+    emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, {bool async = true}) {
-    emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null, async: async);
+  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
+    emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9, {bool async = true}) {
-    if (async == false) {
-      _emit(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-    } else {
-      scheduleMicrotask(() => _emit(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-    }
+  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
+    _emit(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
   }
 
   EventBus._();
@@ -417,7 +395,7 @@ class EventBus {
     assert((){
       if (callback == null) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('''EventBus.$methodName tried to register null callback.''')
+          ErrorSummary('''EventBus.$methodName tried to register a null callback.''')
         ]);
       }
       return true;
@@ -438,6 +416,90 @@ class EventBus {
 
 // An OffEvent doing nothing.
 void _offEvent() {}
+
+class Async {
+  const Async._();
+
+  Future<void> emit() async {
+    await emitData<_NULL>(null);
+  }
+
+  Future<void> emitData<D>(D data) async {
+    await emit2Data<D,_NULL>(data, null);
+  }
+
+  Future<void> emit2Data<D1,D2>(D1 data1, D2 data2) async {
+    await emit3Data<D1,D2,_NULL>(data1, data2, null);
+  }
+
+  Future<void> emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) async {
+    await emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
+  }
+
+  Future<void> emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) async {
+    await emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
+  }
+
+  Future<void> emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) async {
+    await emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
+  }
+
+  Future<void> emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) async {
+    await emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
+  }
+
+  Future<void> emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) async {
+    await emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
+  }
+
+  Future<void> emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) async {
+    await emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
+  }
+
+  Future<void> emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) async {
+    await emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
+  }
+
+  Future<void> emitEvent<E>(E event) async {
+    await emitEventWithArg<E,_NULL>(event, null);
+  }
+
+  Future<void> emitEventWithArg<E,A>(E event, A arg) async {
+    await emitEventWith2Args<E,A,_NULL>(event, arg, null);
+  }
+
+  Future<void> emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) async {
+    await emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
+  }
+
+  Future<void> emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) async {
+    await emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
+  }
+
+  Future<void> emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) async {
+    await emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
+  }
+
+  Future<void> emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) async {
+    await emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
+  }
+
+  Future<void> emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) async {
+    await emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
+  }
+
+  Future<void> emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) async {
+    await emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
+  }
+
+  Future<void> emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) async {
+    await emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
+  }
+
+  Future<void> emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) async {
+    EventBus._singleton.emitEventWith9Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+  }
+}
 
 // 防止回调函数的参数类型包含dynamic或Object时，事件发布出错
 class _NULL {

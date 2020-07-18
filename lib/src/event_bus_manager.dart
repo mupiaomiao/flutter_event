@@ -50,18 +50,20 @@ import 'package:flutter/foundation.dart';
 class EventBusManager {
   EventBusManager();
   
+  Async get async => $eventBus.async;
+
   /// 注销callback
   void off(Function callback) 
     => offEvent(_NULL.Event, callback);
 
   /// 注销event下的callback
   void offEvent(Object event, Function callback) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     _offEvents[_Key(event, callback)]?.call();
   }
 
   OffEvent on(void callback()) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -74,7 +76,7 @@ class EventBusManager {
   }
 
   OffEvent onData<D>(void callback(D data)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -87,7 +89,7 @@ class EventBusManager {
   }
 
   OffEvent on2Data<D1,D2>(void callback(D1 data1, D2 data2)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -100,7 +102,7 @@ class EventBusManager {
   }
 
   OffEvent on3Data<D1,D2,D3>(void callback(D1 data1, D2 data2, D3 data3)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -113,7 +115,7 @@ class EventBusManager {
   }
 
   OffEvent on4Data<D1,D2,D3,D4>(void callback(D1 data1, D2 data2, D3 data3, D4 data4)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -126,7 +128,7 @@ class EventBusManager {
   }
 
   OffEvent on5Data<D1,D2,D3,D4,D5>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -139,7 +141,7 @@ class EventBusManager {
   }
 
   OffEvent on6Data<D1,D2,D3,D4,D5,D6>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -152,7 +154,7 @@ class EventBusManager {
   }
 
   OffEvent on7Data<D1,D2,D3,D4,D5,D6,D7>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -165,7 +167,7 @@ class EventBusManager {
   }
 
   OffEvent on8Data<D1,D2,D3,D4,D5,D6,D7,D8>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -178,7 +180,7 @@ class EventBusManager {
   }
 
   OffEvent on9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(void callback(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(_NULL.Event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -191,7 +193,7 @@ class EventBusManager {
   }
 
   OffEvent onEvent<E>(E event, void callback(E event)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -204,7 +206,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWithArg<E,A>(E event, void callback(E event, A arg)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -217,7 +219,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith2Args<E,A1,A2>(E event, void callback(E event, A1 arg1, A2 arg2)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -230,7 +232,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith3Args<E,A1,A2,A3>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -243,7 +245,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith4Args<E,A1,A2,A3,A4>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -256,7 +258,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith5Args<E,A1,A2,A3,A4,A5>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -269,7 +271,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -282,7 +284,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -295,7 +297,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -308,7 +310,7 @@ class EventBusManager {
   }
 
   OffEvent onEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, void callback(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9)) {
-    _debugCheckIsDisposed();
+    _debugCheckHasDisposed();
     final key = _Key(event, callback);
     if (_offEvents.containsKey(key)) {
       return _offEvent;
@@ -320,124 +322,104 @@ class EventBusManager {
     });
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit({bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit(async: async);
+  void emit() {
+    _debugCheckHasDisposed();
+    $eventBus.emit();
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitData<D>(D data, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitData(data, async: async);
+  void emitData<D>(D data) {
+    _debugCheckHasDisposed();
+    $eventBus.emitData(data);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit2Data<D1,D2>(D1 data1, D2 data2, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit2Data(data1, data2, async: async);
+  void emit2Data<D1,D2>(D1 data1, D2 data2) {
+    _debugCheckHasDisposed();
+    $eventBus.emit2Data(data1, data2);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3, {bool async = true}) { 
-    _debugCheckIsDisposed();
-    $eventBus.emit3Data(data1, data2, data3, async: async);
+  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) { 
+    _debugCheckHasDisposed();
+    $eventBus.emit3Data(data1, data2, data3);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit4Data(data1, data2, data3, data4, async: async);
+  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) {
+    _debugCheckHasDisposed();
+    $eventBus.emit4Data(data1, data2, data3, data4);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit5Data(data1, data2, data3, data4, data5, async: async);
+  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) {
+    _debugCheckHasDisposed();
+    $eventBus.emit5Data(data1, data2, data3, data4, data5);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit6Data(data1, data2, data3, data4, data5, data6, async: async);
+  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) {
+    _debugCheckHasDisposed();
+    $eventBus.emit6Data(data1, data2, data3, data4, data5, data6);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit7Data(data1, data2, data3, data4, data5, data6, data7, async: async);
+  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) {
+    _debugCheckHasDisposed();
+    $eventBus.emit7Data(data1, data2, data3, data4, data5, data6, data7);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit8Data(data1, data2, data3, data4, data5, data6, data7, data8, async: async);
+  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) {
+    _debugCheckHasDisposed();
+    $eventBus.emit8Data(data1, data2, data3, data4, data5, data6, data7, data8);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emit9Data(data1, data2, data3, data4, data5, data6, data7, data8, data9, async: async);
+  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) {
+    _debugCheckHasDisposed();
+    $eventBus.emit9Data(data1, data2, data3, data4, data5, data6, data7, data8, data9);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEvent<E>(E event, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEvent(event, async: async);
+  void emitEvent<E>(E event) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEvent(event);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWithArg<E,A>(E event, A arg, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWithArg(event, arg, async: async);
+  void emitEventWithArg<E,A>(E event, A arg) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWithArg(event, arg);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith2Args(event, arg1, arg2, async: async);
+  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith2Args(event, arg1, arg2);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith3Args(event, arg1, arg2, arg3, async: async);
+  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith3Args(event, arg1, arg2, arg3);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith4Args(event, arg1, arg2, arg3, arg4, async: async);
+  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith4Args(event, arg1, arg2, arg3, arg4);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith5Args(event, arg1, arg2, arg3, arg4, arg5, async: async);
+  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith5Args(event, arg1, arg2, arg3, arg4, arg5);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith6Args(event, arg1, arg2, arg3, arg4, arg5, arg6, async: async);
+  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith6Args(event, arg1, arg2, arg3, arg4, arg5, arg6);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith7Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, async: async);
+  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith7Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith8Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, async: async);
+  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith8Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
   }
 
-  /// 当async = false发布同步事件，默认发布异步事件。
-  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9, {bool async = true}) {
-    _debugCheckIsDisposed();
-    $eventBus.emitEventWith9Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, async: async);
+  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
+    _debugCheckHasDisposed();
+    $eventBus.emitEventWith9Args(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
   }
 
   void dispose() {
@@ -448,7 +430,7 @@ class EventBusManager {
     _disposed = true;
   }
 
-  void _debugCheckIsDisposed() {
+  void _debugCheckHasDisposed() {
     assert((){
       if (_disposed) {
         throw FlutterError.fromParts(<DiagnosticsNode>[
