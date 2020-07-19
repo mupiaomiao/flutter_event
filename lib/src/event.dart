@@ -22,20 +22,14 @@ class Event {
     _callbacks.remove(callback);
   }
 
+  Future<void> async() async 
+    => call();
+
   void call() {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, callback));
-  }
-
-  void async() {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, callback));
-    });
   }
 }
 
@@ -54,20 +48,14 @@ class EventWithArg<A> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A arg) async 
+    => call(arg);
+
   void call(A arg) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg)));
-  }
-
-  void async(A arg) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg)));
-    });
   }
 }
 
@@ -86,20 +74,14 @@ class EventWith2Args<A1,A2> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2) async 
+    => call(arg1, arg2);
+
   void call(A1 arg1, A2 arg2) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2)));
-  }
-
-  void async(A1 arg1, A2 arg2) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2)));
-    });
   }
 }
 
@@ -118,20 +100,14 @@ class EventWit3Args<A1,A2,A3> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3) async 
+    => call(arg1, arg2, arg3);
+
   void call(A1 arg1, A2 arg2, A3 arg3) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3)));
-    });
   }
 }
 
@@ -150,20 +126,14 @@ class EventWith4Args<A1,A2,A3,A4> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4) async 
+    => call(arg1, arg2, arg3, arg4);
+ 
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4)));
-    });
   }
 }
 
@@ -182,20 +152,14 @@ class EventWith5Args<A1,A2,A3,A4,A5> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) async 
+    => call(arg1, arg2, arg3, arg4, arg5);
+
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5)));
-    });
   }
 }
 
@@ -214,20 +178,14 @@ class EventWith6Args<A1,A2,A3,A4,A5,A6> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) async 
+    => call(arg1, arg2, arg3, arg4, arg5, arg6);
+
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6)));
-    });
   }
 }
 
@@ -246,20 +204,14 @@ class EventWith7Args<A1,A2,A3,A4,A5,A6,A7> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) async 
+    => call(arg1, arg2, arg3, arg4, arg5, arg6, arg7);
+
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7)));
-    });
   }
 }
 
@@ -278,20 +230,14 @@ class EventWith8Args<A1,A2,A3,A4,A5,A6,A7,A8> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) async 
+    => call(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8)));
-    });
   }
 }
 
@@ -310,20 +256,14 @@ class EventWith9Args<A1,A2,A3,A4,A5,A6,A7,A8, A9> {
     _callbacks.remove(callback);
   }
 
+  Future<void> async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) async 
+    => call(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+
   void call(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
     if (_callbacks.isEmpty) return;
-    // 防止回调中移除导致报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks.toList();
     callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)));
-  }
-
-  void async(A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
-    if (_callbacks.isEmpty) return;
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks.toList();
-    Future((){
-      callbacks.forEach((callback) => _invoke(this, ()=>callback(arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9)));
-    });
   }
 }
 

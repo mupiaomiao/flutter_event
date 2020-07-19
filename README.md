@@ -116,60 +116,45 @@
 
 # 2. EventBus  
 &emsp;&emsp;EventBus can fire events cross pages and components. You can hold the global single instance by the top level variable `$eventBus` or calling `factory EventBus()`.  
-&emsp;&emsp;- Registering: Call methods beginning with `on` to register a callback. Callbacks registered by methods such as `on`, `onData`, `on2Data` and so on can receive events with arguments, they recognize the event by the number, type and order of the arguments the event took. Callbacks registered by methods such as `onEvent`, `onEventWithArg`, `onEventWith2Args` and so on can receive events with identifier(the `event` parameter) and arguments, they recognize the event by the identifier and the number, type and order of the arguments the event took.  
-&emsp;&emsp;- Unregistering: Call the `off` method to unregister a callback which receives unidentified events, and call the `offEvent` method to unregister a callback which receives identifed events.  
-&emsp;&emsp;- Firing events: Call the methods beginning with `emit` to fire events synchronously, call the `$eventBus.async`'s methods to fire events asynchronously.  
-&emsp;&emsp;Example：  
+&emsp;&emsp;- Register: Event callbacks registered through methods such as "on", "onData" and "on2Data" can receive events with the same number, type, and parameter sequence as the callback function signature. However, sometimes the above methods cannot meet the requirements. We can call "onEvent", "onEventWithArg", "onEventWith2Args" and other methods to register and mark an event callback, the events that the callback can receive not only require the same number, type, and parameter sequence as the callback function signature, and also require the same identifier as the identifier named event used when registering the callback.  
+&emsp;&emsp;- Unregister: Call the `off` method to unregister a callback without identifier, and call the `offEvent` method to unregister a callback with identifier.  
+&emsp;&emsp;- Fire events: Call the methods beginning with `emit` to fire events synchronously. Call the `$eventBus.async`'s methods to fire events asynchronously.  
+&emsp;&emsp;example：  
   ```dart
-    class _SomeWidgetState extends State<SomeWidget> {
+    class SomeWidgetState extends State<SomeWidget> {
       OffEvent offEvent1;
       OffEvent offEvent2;
-      OffEvent offEvent3;
 
       @override
       void initState() {
         super.initState();
-        offEvent1 = $eventBus.onData(onInt);
-        offEvent2 = $eventBus.onEvent("test", onTest);
-        offEvent3 = $eventBus.onEventWithArg("test", onTestWithData);
+        offEvent1 = $eventBus.on3Data(on3Data);
+        offEvent2 = $eventBus.onEventWithArg("test", onTestWith3Args);
       }
 
-      void onInt(int value) {
+      void on3Data(int data1, String data2, double data3) {
         // some codes
       }
 
-      void onTest(String event) {
-        // some codes
-      }
-
-      void onTestWithData(String event, String data) {
+      void onTestWith3Args(String event, int arg1, String arg2, double arg3) {
         // some codes
       }
 
       @override
       void dispose() {
-        offEvent1();  // or $eventBus.off(onInt);
-        offEvent2();  // or $eventBus.offEvent("test", onTest);
-        offEvent3();  // or $eventBus.offEvent("text", onTestWithData);
+        offEvent1();  // or $eventBus.off(on3Data);
+        offEvent2();  // or $eventBus.offEvent("test", onTestWith3Args);
         super.dispose();
       }
     }
   ```
-## 2.1 无指定事件  
-&emsp;&emsp;通过*on*、*onData*、*on2Data* ... *on9Data*注册的监听函数，只能够接收参数类型、顺序和数量与监听函数的签名相同的事件，例如：  
-  ```dart
-    void callback(int data1, String data2, double data3) {
-      // some codes
-    }
-    $eventBus.on3Data(callback);
-  ```
-&emsp;&emsp;可以接收到如下事件：  
+&emsp;&emsp;- The `SomeWidgetState.on3Data` can receive such as the following events:  
   ```dart
     $eventBus.emit3Data(22, "Hi", 33.0);
     $eventBus.emit3Data(2, 'Good', 33.9);
     $eventBus.async.emit3Data(33, 'Wo', 99.0);
   ```
-&emsp;&emsp;但不能接收到以下事件：  
+&emsp;&emsp;but cannot receive such as the following events:  
   ```dart
     $eventBus.emit3Data(1, 1, 1);
     $eventBus.async.emit3Data(1, 1, 1);
@@ -178,21 +163,13 @@
     $eventBus.emit4Data(1, 'Hi', 12.0, 44);
     $eventBus.emitEventWith2Args(2, "Good", 33.9);
   ```
-## 2.2 指定事件  
-&emsp;&emsp;通过*onEvent*、*onEventWithArg*、*onEventWith2Args* ... *onEventWith9Args*不仅要求事件的参数类型、顺序和数量与监听函数的签名相同，还要求事件必须为相同事件，例如：  
-  ```dart
-    void callback(String event, int arg1, String arg2, double arg3) {
-      // some codes
-    }
-    $eventBus.onEventWith3Args("test", callback);
-  ```
-&emsp;&emsp;可以接收到如下事件：  
+&emsp;&emsp;- The `SomeWidgetState.onTestWith3Args` can receive such as the following events:  
   ```dart
     $eventBus.emitEventWith3Args("test", 12, "Hi", 33.5);
     $eventBus.emitEventWith3Args("test", 22, "Good", 102.0);
     $eventBus.async.emitEventWith3Args("test", 12, "Goods", 44.0);
   ```
-&emsp;&emsp;但不能接收到以下事件：  
+&emsp;&emsp;but cannot receive the following events:  
   ```dart
     $eventBus.emit4Data("test", 12, "Hi", 33.5);
     $eventBus.emitEventWith3Args("test1", 12, "Hi", 33.5);
@@ -201,12 +178,13 @@
     $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
     $eventBus.async.emit4Data("test", 12, "Hi", 33.9);
   ```
-## 2.3 EventBusManager、EventBusState and EventBusStateMixin  
-&emsp;&emsp;- *EventBusManager*：对*EventBus*的封装，可以在适当的时机调用其实例的*dispose*方法，注销掉所有通过该实例注册到*EventBus*上的回调函数；例如：  
+# 3. EventBusManager  
+&emsp;&emsp; * The callbacks registered on EventBus should be unregistered one by one when they are no needed any more. It is a heavy work if there are many callbacks and will lead to memory leaks if forgot unregistering any one callback.  
+&emsp;&emsp; * An EventBusManager instance can release all callbacks registered on EventBus through it when call its `dispose`.  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
       final eventBusManager = EventBusManager();  
- 
+
       @override
       void initState() {
         super.initState();
@@ -214,24 +192,24 @@
         eventBusManager.onEvent("test", onTest);
         eventBusManager.onEventWithArg("test", onTestWithData);
       }
- 
+
       void onInt(int value) {
-        ...
+        // some codes
       }
- 
+
       void onTest(String event) {
-        ...
+        // some codes
       }
- 
+
       void onTestWithData(String event, String data) {
-        ...
+        // some codes
       }
- 
+
       @override
       void dispose() {
         super.dispose();
+        // Never need to release callbacks one by one.
         eventBusManager.dispose();
       }
     }
-  ```  
-&emsp;&emsp;- *EventBusState*和*EventBusStateMixin*：包含一个*EventBusManager*属性*eventBus*，通过*eventBus*可以向*EventBus*上注册回调；重载了*State*的*dispose*方法，以便在系统调用*State*的*dispose*方法释放资源的时候，自动注销掉所有通过*eventBus*注册到*EventBus*上的回调函数。  
+  ```

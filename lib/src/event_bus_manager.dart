@@ -5,10 +5,10 @@ import 'package:meta/meta.dart';
 import 'package:flutter/foundation.dart';
 
 /// * The callbacks registered on EventBus should be unregistered one by one when they
-/// are no needed any more. It is a heavy work if there are many callbacks. And will lead 
+/// are no needed any more. It is a heavy work if there are many callbacks and will lead 
 /// to memory leaks if forgot unregistering any one callback.
 /// 
-/// * An EventBusManager instance can release all callbacks were registered on EventBus 
+/// * An EventBusManager instance can release all callbacks registered on EventBus 
 /// through it when call its `dispose`.
 /// 
 /// {@tool}

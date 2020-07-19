@@ -7,101 +7,110 @@ import 'package:flutter/foundation.dart';
 
 final $eventBus = EventBus();
 
-/// 事件总线
+/// EventBus can fire events cross pages and components. You can hold the global single 
+/// instance by the top level variable `$eventBus` or calling `factory EventBus()`.
 /// 
-/// * 注册：调用以*on*开头的方法注册事件监听；
+/// * Register: Event callbacks registered through methods such as "on", "onData" and 
+/// "on2Data" can receive events with the same number, type, and parameter sequence as
+/// the callback function signature. However, sometimes the above methods cannot meet
+/// the requirements. We can call "onEvent", "onEventWithArg", "onEventWith2Args" and 
+/// other methods to register and mark an event callback, the events that the callback 
+/// can receive not only require the same number, type, and parameter sequence as the 
+/// callback function signature, and also require the same identifier as the identifier 
+/// named event used when registering the callback.
 /// 
-/// * 发布：调用以*emit*开头的方法发布事件；
+/// * Unregister: Call the `off` method to unregister a callback without identifier, 
+/// and call the `offEvent` method to unregister a callback with identifier.
 /// 
-/// * 注销：调用*off*、*offEvent*或注册时返回的函数注销事件监听；
+/// * Fire events: Call the methods beginning with `emit` to fire events synchronously.
+/// Call the `$eventBus.async`'s methods to fire events asynchronously.
 /// 
 /// {@tool}
 /// 
 /// ```dart
-/// class _SomeWidgetState extends State<SomeWidget> {
+/// class SomeWidgetState extends State<SomeWidget> {
 ///   OffEvent offEvent1;
 ///   OffEvent offEvent2;
-///   OffEvent offEvent3;
-///   
+/// 
 ///   @override
 ///   void initState() {
 ///     super.initState();
-///     offEvent1 = $eventBus.onData(onInt);
-///     offEvent2 = $eventBus.onEvent("test", onTest);
-///     offEvent3 = $eventBus.onEventWithArg("test", onTestWithData);
+///     offEvent1 = $eventBus.on3Data(on3Data);
+///     offEvent2 = $eventBus.onEventWithArg("test", onTestWith3Args);
 ///   }
 /// 
-///   void onInt(int value) {
-///     ...
+///   void on3Data(int data1, String data2, double data3) {
+///     // some codes
 ///   }
 /// 
-///   void onTest(String event) {
-///     ...
-///   }
-/// 
-///   void onTestWithData(String event, String data) {
-///     ...
+///   void onTestWith3Args(String event, int arg1, String arg2, double arg3) {
+///     // some codes
 ///   }
 /// 
 ///   @override
 ///   void dispose() {
+///     offEvent1();  // or $eventBus.off(on3Data);
+///     offEvent2();  // or $eventBus.offEvent("test", onTestWith3Args);
 ///     super.dispose();
-///     offEvent1();
-///     offEvent2();
-///     offEvent3();
-///     // or
-///     // $eventBus.off(onInt);
-///     // $eventBus.offEvent("test", onTest);
-///     // $eventBus.offEvent("test", onTestWithData);
 ///   }
 /// }
 /// ```
 /// 
 /// {@end-tool}
 /// 
-/// 通过*on*、*onData*、*on2Data* ... *on9Data*注册的监听函数，只能够接收参数类型、
-/// 顺序和数量与监听函数的签名相同的事件，例如：
+/// * The `SomeWidgetState.on3Data` can receive such as the following events:
+/// 
+/// {@tool}
+///   
 /// ```dart
-/// void callback(int data1, String data2, double data3) {
-///   ...
-/// }
-/// $eventBus.on3Data(callback);
-/// ```
-/// 可以接收到如下事件：
-/// ```dart
-/// $eventBus.emit3Data(22, "Hi", 33.0);
-/// $eventBus.emit3Data(2, 'Good', 33.9);
-/// ```
-/// 但不能接收到以下事件：
-/// ```dart
-/// $eventBus.emit3Data(1, 1, 1);
-/// $eventBus.emit3Data('Hi', 1, 23.0);
-/// $eventBus.emit3Data(22.0, "Hi", 33);
-/// $eventBus.emit4Data(1, 'Hi', 12.0, 44);
-/// $eventBus.emitEventWith2Args(2, "Good", 33.9);
+///   $eventBus.emit3Data(22, "Hi", 33.0);
+///   $eventBus.emit3Data(2, 'Good', 33.9);
+///   $eventBus.async.emit3Data(33, 'Wo', 99.0);  // fire an event asynchronously.
 /// ```
 /// 
-/// 通过*onEvent*、*onEventWithArg*、*onEventWith2Args* ... *onEventWith9Args*不
-/// 仅要求事件的参数类型、顺序和数量与监听函数的签名相同，还要求事件必须为相同事件，例如：
+/// {@end-tool}
+/// 
+/// but cannot receive such as the following events:  
+/// 
+/// {@tool}
+/// 
 /// ```dart
-/// void callback(String event, int arg1, String arg2, double arg3) {
-///   ...
-/// }
-/// $eventBus.onEventWith3Args("test", callback);
+///   $eventBus.emit3Data(1, 1, 1);
+///   $eventBus.async.emit3Data(1, 1, 1);  // fire an event asynchronously.
+///   $eventBus.emit3Data('Hi', 1, 23.0);
+///   $eventBus.emit3Data(22.0, "Hi", 33);
+///   $eventBus.emit4Data(1, 'Hi', 12.0, 44);
+///   $eventBus.emitEventWith2Args(2, "Good", 33.9);
 /// ```
-/// 可以接收到如下事件：
+/// 
+/// {@end-tool}
+/// 
+/// * The `SomeWidgetState.onTestWith3Args` can receive such as the following events:
+/// 
+/// {@tool}
+/// 
 /// ```dart
-/// $eventBus.emitEventWith3Args("test", 12, "Hi", 33.5);
-/// $eventBus.emitEventWith3Args("test", 22, "Good", 102.0);
+///   $eventBus.emitEventWith3Args("test", 12, "Hi", 33.5);
+///   $eventBus.emitEventWith3Args("test", 22, "Good", 102.0);
+///   $eventBus.async.emitEventWith3Args("test", 12, "Goods", 44.0);  // fire an event asynchronously.
 /// ```
-/// 但不能接收到以下事件：
+/// 
+/// {@end-tool}
+/// 
+/// but cannot receive such as the following events:  
+/// 
+/// {@tool}
+/// 
 /// ```dart
-/// $eventBus.emit4Data("test", 12, "Hi", 33.5);
-/// $eventBus.emitEventWith3Args("test1", 12, "Hi", 33.5);
-/// $eventBus.emitEventWith3Args("test", "Hi", 12, 33.5);
-/// $eventBus.emitEventWith3Args("Test", "Hi", 12, 33.5);
-/// $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
+///   $eventBus.emit4Data("test", 12, "Hi", 33.5);
+///   $eventBus.emitEventWith3Args("test1", 12, "Hi", 33.5);
+///   $eventBus.emitEventWith3Args("test", "Hi", 12, 33.5);
+///   $eventBus.emitEventWith3Args("Test", "Hi", 12, 33.5);
+///   $eventBus.emitEventWith4Args("test", 12, "Hi", 33.5, 33);
+///   $eventBus.async.emit4Data("test", 12, "Hi", 33.9);  // fire an event asynchronously.
 /// ```
+/// 
+/// {@end-tool}
 @sealed
 class EventBus {
   final async = AsyncEmitter._();
@@ -246,85 +255,65 @@ class EventBus {
     return _on(evt, _EventWith9ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(callback));
   }
 
-  void emit() {
-    emitData<_NULL>(null);
-  }
+  void emit() 
+    => _emit<_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event);
 
-  void emitData<D>(D data) {
-    emit2Data<D,_NULL>(data, null);
-  }
+  void emitData<D>(D data) 
+    => _emit<_NULL,D,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data);
 
-  void emit2Data<D1,D2>(D1 data1, D2 data2) {
-    emit3Data<D1,D2,_NULL>(data1, data2, null);
-  }
+  void emit2Data<D1,D2>(D1 data1, D2 data2) 
+    => _emit<_NULL,D1,D2,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2);
 
-  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) {
-    emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
-  }
+  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) 
+    => _emit<_NULL,D1,D2,D3,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3);
 
-  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) {
-    emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
-  }
+  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) 
+    => _emit<_NULL,D1,D2,D3,D4,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4);
 
-  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) {
-    emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
-  }
+  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) 
+    => _emit<_NULL,D1,D2,D3,D4,D5,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5);
 
-  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) {
-    emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
-  }
+  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) 
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6);
 
-  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) {
-    emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
-  }
+  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) 
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7);
 
-  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) {
-    emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
-  }
+  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) 
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8);
 
-  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) {
-    emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
-  }
+  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) 
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
 
-  void emitEvent<E>(E event) {
-    emitEventWithArg<E,_NULL>(event, null);
-  }
+  void emitEvent<E>(E event) 
+    => _emit<E,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event);
 
-  void emitEventWithArg<E,A>(E event, A arg) {
-    emitEventWith2Args<E,A,_NULL>(event, arg, null);
-  }
+  void emitEventWithArg<E,A>(E event, A arg) 
+    => _emit<E,A,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg);
 
-  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) {
-    emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
-  }
+  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) 
+    => _emit<E,A1,A2,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2);
 
-  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) {
-    emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
-  }
+  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) 
+    => _emit<E,A1,A2,A3,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3);
 
-  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
-    emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
-  }
+  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) 
+    => _emit<E,A1,A2,A3,A4,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4);
 
-  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
-    emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
-  }
+  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) 
+    => _emit<E,A1,A2,A3,A4,A5,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5);
 
-  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
-    emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
-  }
+  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) 
+    => _emit<E,A1,A2,A3,A4,A5,A6,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6);
 
-  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
-    emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
-  }
+  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) 
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 
-  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
-    emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
-  }
+  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) 
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 
-  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
-    _emit(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-  }
+  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) 
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 
   EventBus._();
 
@@ -343,7 +332,7 @@ class EventBus {
     callbacks.add(callback);
     assert((){
       var log = 'EventBus: register ${callback.callback}';
-      log += event.event == _NULL.Event ? '.' : ' for event "${event.event}".';
+      log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
       print(log);
       return true;
     }());
@@ -355,29 +344,19 @@ class EventBus {
       _offEvents.remove(key);
       assert((){
         var log = 'EventBus: unregister ${callback.callback}';
-        log += event.event == _NULL.Event ? '.' : ' for event "${event.event}".';
+        log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
         print(log);
         return true;
       }());
     });
   }
 
-  void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
+  void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>([E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9]) {
     final evt = _Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event);
-    // 防止回调移除报错
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
     final callbacks = _callbacks[evt]?.toList();
     if (callbacks?.isEmpty ?? true) return;
-    callbacks.forEach((callback) => _invoke(callback, evt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-  }
-
-  void _emitAsync<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
-    final evt = _Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event);
-    // 防止稍后发布事件时回调不一致和回调中移除报错
-    final callbacks = _callbacks[evt]?.toList();
-    if (callbacks?.isEmpty ?? true) return;
-    Future((){
-      callbacks.forEach((callback) => _invoke(callback, evt, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
-    });
+    callbacks.forEach((callback) => _invoke(callback, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9));
   }
 
   void _invoke(_ICallback callback, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
@@ -423,94 +402,77 @@ class EventBus {
   }
 }
 
-// An OffEvent doing nothing.
-void _offEvent() {}
-
 class AsyncEmitter {
   const AsyncEmitter._();
 
-  void emit() {
-    emitData<_NULL>(null);
-  }
+  Future<void> emit() async 
+    => _emit<_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event);
 
-  void emitData<D>(D data) {
-    emit2Data<D,_NULL>(data, null);
-  }
+  Future<void> emitData<D>(D data) async
+    => _emit<_NULL,D,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data);
 
-  void emit2Data<D1,D2>(D1 data1, D2 data2) {
-    emit3Data<D1,D2,_NULL>(data1, data2, null);
-  }
+  Future<void> emit2Data<D1,D2>(D1 data1, D2 data2) async
+    => _emit<_NULL,D1,D2,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2);
 
-  void emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) {
-    emit4Data<D1,D2,D3,_NULL>(data1, data2, data3, null);
-  }
+  Future<void> emit3Data<D1,D2,D3>(D1 data1, D2 data2, D3 data3) async
+    => _emit<_NULL,D1,D2,D3,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3);
 
-  void emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) {
-    emit5Data<D1,D2,D3,D4,_NULL>(data1, data2, data3, data4, null);
-  }
+  Future<void> emit4Data<D1,D2,D3,D4>(D1 data1, D2 data2, D3 data3, D4 data4) async
+    => _emit<_NULL,D1,D2,D3,D4,_NULL,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4);
 
-  void emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) {
-    emit6Data<D1,D2,D3,D4,D5,_NULL>(data1, data2, data3, data4, data5, null);
-  }
+  Future<void> emit5Data<D1,D2,D3,D4,D5>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5) async
+    => _emit<_NULL,D1,D2,D3,D4,D5,_NULL,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5);
 
-  void emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) {
-    emit7Data<D1,D2,D3,D4,D5,D6,_NULL>(data1, data2, data3, data4, data5, data6, null);
-  }
+  Future<void> emit6Data<D1,D2,D3,D4,D5,D6>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6) async
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,_NULL,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6);
 
-  void emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) {
-    emit8Data<D1,D2,D3,D4,D5,D6,D7,_NULL>(data1, data2, data3, data4, data5, data6, data7, null);
-  }
+  Future<void> emit7Data<D1,D2,D3,D4,D5,D6,D7>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7) async
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,_NULL,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7);
 
-  void emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) {
-    emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(data1, data2, data3, data4, data5, data6, data7, data8, null);
-  }
+  Future<void> emit8Data<D1,D2,D3,D4,D5,D6,D7,D8>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8) async
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,_NULL>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8);
 
-  void emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) {
-    emitEventWith9Args<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
-  }
+  Future<void> emit9Data<D1,D2,D3,D4,D5,D6,D7,D8,D9>(D1 data1, D2 data2, D3 data3, D4 data4, D5 data5, D6 data6, D7 data7, D8 data8, D9 data9) async
+    => _emit<_NULL,D1,D2,D3,D4,D5,D6,D7,D8,D9>(_NULL.Event, data1, data2, data3, data4, data5, data6, data7, data8, data9);
 
-  void emitEvent<E>(E event) {
-    emitEventWithArg<E,_NULL>(event, null);
-  }
+  Future<void> emitEvent<E>(E event) async
+    => _emit<E,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event);
 
-  void emitEventWithArg<E,A>(E event, A arg) {
-    emitEventWith2Args<E,A,_NULL>(event, arg, null);
-  }
+  Future<void> emitEventWithArg<E,A>(E event, A arg) async
+    => _emit<E,A,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg);
 
-  void emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) {
-    emitEventWith3Args<E,A1,A2,_NULL>(event, arg1, arg2, null);
-  }
+  Future<void> emitEventWith2Args<E,A1,A2>(E event, A1 arg1, A2 arg2) async
+    => _emit<E,A1,A2,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2);
 
-  void emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) {
-    emitEventWith4Args<E,A1,A2,A3,_NULL>(event, arg1, arg2, arg3, null);
-  }
+  Future<void> emitEventWith3Args<E,A1,A2,A3>(E event, A1 arg1, A2 arg2, A3 arg3) async
+    => _emit<E,A1,A2,A3,_NULL,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3);
 
-  void emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) {
-    emitEventWith5Args<E,A1,A2,A3,A4,_NULL>(event, arg1, arg2, arg3, arg4, null);
-  }
+  Future<void> emitEventWith4Args<E,A1,A2,A3,A4>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4) async
+    => _emit<E,A1,A2,A3,A4,_NULL,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4);
 
-  void emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) {
-    emitEventWith6Args<E,A1,A2,A3,A4,A5,_NULL>(event, arg1, arg2, arg3, arg4, arg5, null);
-  }
+  Future<void> emitEventWith5Args<E,A1,A2,A3,A4,A5>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5) async
+    => _emit<E,A1,A2,A3,A4,A5,_NULL,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5);
 
-  void emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) {
-    emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, null);
-  }
+  Future<void> emitEventWith6Args<E,A1,A2,A3,A4,A5,A6>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6) async
+    => _emit<E,A1,A2,A3,A4,A5,A6,_NULL,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6);
 
-  void emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) {
-    emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, null);
-  }
+  Future<void> emitEventWith7Args<E,A1,A2,A3,A4,A5,A6,A7>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7) async
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,_NULL,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7);
 
-  void emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) {
-    emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, null);
-  }
+  Future<void> emitEventWith8Args<E,A1,A2,A3,A4,A5,A6,A7,A8>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8) async
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,_NULL>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
 
-  void emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) {
-    EventBus._singleton._emitAsync(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-  }
+  Future<void> emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) async
+    => _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+
+  void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>([E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9]) 
+    => EventBus._singleton._emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 }
 
-// 防止回调函数的参数类型包含dynamic或Object时，事件发布出错
+// An OffEvent doing nothing.
+void _offEvent() {}
+
+/// Avoid wrongs when the types of arguments include `dynamic` or `Object`.
 class _NULL {
   const _NULL();
   static const Event = _NULL();
@@ -603,9 +565,8 @@ class _VoidCallback implements _ICallback {
   const _VoidCallback(this.callback)
     : assert(callback != null);
   
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback();
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback();
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -625,9 +586,8 @@ class _DataCallback<D> implements _ICallback {
   const _DataCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -646,9 +606,8 @@ class _DataCallback2<D1,D2> implements _ICallback {
   const _DataCallback2(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -667,9 +626,8 @@ class _DataCallback3<D1,D2,D3> implements _ICallback {
   const _DataCallback3(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -688,9 +646,8 @@ class _DataCallback4<D1,D2,D3,D4> implements _ICallback {
   const _DataCallback4(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -709,9 +666,8 @@ class _DataCallback5<D1,D2,D3,D4,D5> implements _ICallback {
   const _DataCallback5(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -730,9 +686,8 @@ class _DataCallback6<D1,D2,D3,D4,D5,D6> implements _ICallback {
   const _DataCallback6(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -751,9 +706,8 @@ class _DataCallback7<D1,D2,D3,D4,D5,D6,D7> implements _ICallback {
   const _DataCallback7(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -772,9 +726,8 @@ class _DataCallback8<D1,D2,D3,D4,D5,D6,D7,D8> implements _ICallback {
   const _DataCallback8(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7, arg8 as D8);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7, arg8 as D8);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -793,9 +746,8 @@ class _DataCallback9<D1,D2,D3,D4,D5,D6,D7,D8,D9> implements _ICallback {
   const _DataCallback9(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7, arg8 as D8, arg9 as D9);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(arg1 as D1, arg2 as D2, arg3 as D3, arg4 as D4, arg5 as D5, arg6 as D6, arg7 as D7, arg8 as D8, arg9 as D9);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -815,9 +767,8 @@ class _EventCallback<E> implements _ICallback {
   const _EventCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -836,9 +787,8 @@ class _EventWithArgCallback<E,A> implements _ICallback {
   const _EventWithArgCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -857,9 +807,8 @@ class _EventWith2ArgsCallback<E,A1,A2> implements _ICallback {
   const _EventWith2ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -878,9 +827,8 @@ class _EventWith3ArgsCallback<E,A1,A2,A3> implements _ICallback {
   const _EventWith3ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -899,9 +847,8 @@ class _EventWith4ArgsCallback<E,A1,A2,A3,A4> implements _ICallback {
   const _EventWith4ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -920,9 +867,8 @@ class _EventWith5ArgsCallback<E,A1,A2,A3,A4,A5> implements _ICallback {
   const _EventWith5ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -941,9 +887,8 @@ class _EventWith6ArgsCallback<E,A1,A2,A3,A4,A5,A6> implements _ICallback {
   const _EventWith6ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -962,9 +907,8 @@ class _EventWith7ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7> implements _ICallback {
   const _EventWith7ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -983,9 +927,8 @@ class _EventWith8ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8> implements _ICallback {
   const _EventWith8ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7, arg8 as A8);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7, arg8 as A8);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
@@ -1004,9 +947,8 @@ class _EventWith9ArgsCallback<E,A1,A2,A3,A4,A5,A6,A7,A8,A9> implements _ICallbac
   const _EventWith9ArgsCallback(this.callback)
     : assert(callback != null);
 
-  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7, arg8 as A8, arg9 as A9);
-  }
+  void call(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) 
+    => callback(event as E, arg1 as A1, arg2 as A2, arg3 as A3, arg4 as A4, arg5 as A5, arg6 as A6, arg7 as A7, arg8 as A8, arg9 as A9);
 
   @override
   int get hashCode => hash(<int>[callback.hashCode]);
