@@ -179,8 +179,8 @@
     $eventBus.async.emit4Data("test", 12, "Hi", 33.9);
   ```
 # 3. EventBusManager  
-&emsp;&emsp; * The callbacks registered on EventBus should be unregistered one by one when they are no needed any more. It is a heavy work if there are many callbacks and will lead to memory leaks if forgot unregistering any one callback.  
-&emsp;&emsp; * An EventBusManager instance can release all callbacks registered on EventBus through it when call its `dispose`.  
+&emsp;&emsp; The callbacks registered on EventBus should be unregistered one by one when they are no needed any more. It is a heavy work if there are many callbacks and will lead to memory leaks if forgot unregistering any one callback.  
+&emsp;&emsp; An EventBusManager instance can release all callbacks registered on EventBus through it when call its `dispose`.  
   ```dart
     class _SomeWidgetState extends State<SomeWidget> {
       final eventBusManager = EventBusManager();  
