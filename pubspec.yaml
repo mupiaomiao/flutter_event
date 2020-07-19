@@ -1,7 +1,6 @@
 name: flutter_event
 description: An event package for Flutter.
 version: 1.0.0
-author: Piaomiao Mu
 homepage: https://github.com/mupiaomiao/flutter_event
 
 environment:
@@ -10,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  meta: ^1.1.2
+  
 dev_dependencies:
   flutter_test:
     sdk: flutter.
