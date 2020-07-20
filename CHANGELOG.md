@@ -1,3 +1,5 @@
-## [1.0.0] - 2020.7.20
+# Changelog
 
-* Publish package.
+## Version 1.0.0 (2020.7.20)
+
+- Publish package.
