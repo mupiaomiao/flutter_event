@@ -1,5 +1,5 @@
 name: flutter_event
-description: An event package for Flutter.
+description: An event package for Flutter, can fire events cross pages and components.Supported both iOS and Android.
 version: 1.0.0
 homepage: https://github.com/mupiaomiao/flutter_event
 
