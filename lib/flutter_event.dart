@@ -1,4 +1,4 @@
-library mpm_event;
+library flutter_event;
 // event
 export 'src/event.dart';
 export 'src/off_event.dart';
