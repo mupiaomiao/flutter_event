@@ -115,6 +115,12 @@ final $eventBus = EventBus();
 class EventBus {
   final async = AsyncEmitter._();
 
+  int get callbacksCount {
+    int count = 0;
+    _callbacks?.forEach((_, callbacks) => count += callbacks.length);
+    return count;
+  }
+
   factory EventBus() => _singleton;
 
   /// 注销callback
@@ -330,24 +336,24 @@ class EventBus {
       _callbacks[event] = callbacks;
     }
     callbacks.add(callback);
-    assert((){
-      var log = 'EventBus: register ${callback.callback}';
-      log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
-      print(log);
-      return true;
-    }());
+    // assert((){
+    //   var log = 'EventBus: register ${callback.callback}';
+    //   log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
+    //   print(log);
+    //   return true;
+    // }());
     return _offEvents.putIfAbsent(key, () => () {
       callbacks.remove(callback);
       if (callbacks.isEmpty) {
         _callbacks.remove(event);
       }
       _offEvents.remove(key);
-      assert((){
-        var log = 'EventBus: unregister ${callback.callback}';
-        log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
-        print(log);
-        return true;
-      }());
+      // assert((){
+      //   var log = 'EventBus: unregister ${callback.callback}';
+      //   log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
+      //   print(log);
+      //   return true;
+      // }());
     });
   }
 

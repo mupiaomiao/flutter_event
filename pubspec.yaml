@@ -11,3 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   meta: ^1.1.2
+dev_dependencies:
+  test: 1.14.4
+  flutter_test:
+    sdk: flutter
