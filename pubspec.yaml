@@ -1,6 +1,6 @@
 name: flutter_event
 version: 1.0.0
-description: Fire events cross pages and components. Supported both iOS and Android.
+description: Fire events cross pages and components.
 homepage: https://github.com/mupiaomiao/flutter_event
 repository: https://github.com/mupiaomiao/flutter_event
 

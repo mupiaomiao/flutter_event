@@ -1,9 +1,8 @@
 import 'dart:async';
 import './hash.dart';
 import './off_event.dart';
+import './report_error.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/widgets.dart';
-import 'package:flutter/foundation.dart';
 
 final $eventBus = EventBus();
 
@@ -336,24 +335,12 @@ class EventBus {
       _callbacks[event] = callbacks;
     }
     callbacks.add(callback);
-    // assert((){
-    //   var log = 'EventBus: register ${callback.callback}';
-    //   log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
-    //   print(log);
-    //   return true;
-    // }());
     return _offEvents.putIfAbsent(key, () => () {
       callbacks.remove(callback);
       if (callbacks.isEmpty) {
         _callbacks.remove(event);
       }
       _offEvents.remove(key);
-      // assert((){
-      //   var log = 'EventBus: unregister ${callback.callback}';
-      //   log += event.event == _NULL.Event ? '.' : ' listens to event "${event.event}".';
-      //   print(log);
-      //   return true;
-      // }());
     });
   }
 
@@ -369,28 +356,20 @@ class EventBus {
     try {
       callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
     } catch (exception, stack) {
-      FlutterError.reportError(FlutterErrorDetails(
-        exception: exception,
+      reportError(
         stack: stack,
-        library: 'mpm library',
-        context: ErrorDescription('while dispatching events for $runtimeType'),
-        informationCollector: () sync* {
-          yield DiagnosticsProperty<EventBus>(
-            'The $runtimeType dispatching event was',
-            this,
-            style: DiagnosticsTreeStyle.errorProperty,
-          );
-        }
-      ));
+        exception: exception,
+        context: 'when EventBus dispatches events'
+      );
     }
   }
 
   static void _debugCheckNullCallback(String methodName, Function callback) {
     assert((){
       if (callback == null) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('''EventBus.$methodName tried to register a null callback.''')
-        ]);
+        throw ArgumentError(
+          '''EventBus.$methodName tried to register a null callback.'''
+        );
       }
       return true;
     }());
@@ -399,9 +378,9 @@ class EventBus {
   static void _debugCheckNullEvent(String methodName, dynamic event) {
     assert((){
       if (event == null) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('''EventBus.$methodName tried to register a null event.''')
-        ]);
+        throw ArgumentError(
+          '''EventBus.$methodName tried to register a null event.'''
+        );
       }
       return true;
     }());

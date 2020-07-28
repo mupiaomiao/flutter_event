@@ -1,7 +1,7 @@
 import 'dart:async';
 import './off_event.dart';
+import './report_error.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/foundation.dart';
 
 abstract class EventArgs {
   const EventArgs();
@@ -273,28 +273,20 @@ void _invoke<T>(T caller, void callback()) {
   try {
     callback();
   } catch (exception, stack) {
-    FlutterError.reportError(FlutterErrorDetails(
-      exception: exception,
+    reportError(
       stack: stack,
-      library: 'flutter_event library',
-      context: ErrorDescription('while dispatching events for ${caller.runtimeType}'),
-      informationCollector: () sync* {
-        yield DiagnosticsProperty<T>(
-          'The ${caller.runtimeType} dispatching event was',
-          caller,
-          style: DiagnosticsTreeStyle.errorProperty,
-        );
-      },
-    ));
+      exception: exception,
+      context: 'when $caller dispatches events'
+    );
   }
 }
 
 void _debugCheckNullEventCallback(Type eventType, Function callback) {
   assert((){
     if (callback == null) {
-      throw FlutterError.fromParts(<DiagnosticsNode>[
-        ErrorSummary('''$eventType tried to register or unregister a null callback.''')
-      ]);
+      throw ArgumentError(
+        '''$eventType tried to register or unregister a null callback.'''
+      );
     }
     return true;
   }());

@@ -2,7 +2,6 @@ import './hash.dart';
 import './event_bus.dart';
 import './off_event.dart';
 import 'package:meta/meta.dart';
-import 'package:flutter/foundation.dart';
 
 /// * The callbacks registered on EventBus should be unregistered one by one when they
 /// are no needed any more. It is a heavy work if there are many callbacks and will lead 
@@ -431,9 +430,9 @@ class EventBusManager {
   void _debugCheckHasDisposed() {
     assert((){
       if (_disposed) {
-        throw FlutterError.fromParts(<DiagnosticsNode>[
-          ErrorSummary('''$this has disposed.''')
-        ]);
+        throw Exception(
+          '''$this has disposed.'''
+        );
       }
       return true;
     }());

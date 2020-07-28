@@ -2,7 +2,7 @@ import 'package:test/test.dart';
 import './src/event_bus_tester.dart';
 import 'package:flutter_event/flutter_event.dart';
 
-void main() { 
+void main() {
   group('Event bus test:', () {
     test('Event bus callbacks count', (){
       final tester = EventBusTester();
