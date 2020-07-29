@@ -122,18 +122,11 @@ class EventBus {
 
   factory EventBus() => _singleton;
 
-  /// 注销callback
   void off(Function callback) 
     => offEvent(_NULL.Event, callback);
 
-  /// 注销event下的callback
-  void offEvent(Object event, Function callback) {
-    if (!_isFiring) {
-      _offEvents[_Key(event, callback)]?.call();
-    } else {
-      _removedCallbacksWhenEmitting.add(_Key(event, callback));
-    }
-  }
+  void offEvent(Object event, Function callback) 
+    => _offEvents[_Key(event, callback)]?.call();
 
   OffEvent on(void callback()) {
     _debugCheckNullCallback('on', callback);
@@ -327,18 +320,16 @@ class EventBus {
 
   EventBus._();
 
-  bool _isFiring = false;
   static final _singleton = new EventBus._();
   final _offEvents = new Map<_Key, OffEvent>();
-  final _removedCallbacksWhenEmitting = List<_Key>();
-  final _callbacks = new Map<_IEvent, List<_ICallback>>();
+  final _callbacks = new Map<_IEvent, Set<_ICallback>>();
 
   OffEvent _on(_IEvent event, _ICallback callback) {
     final key = _Key(event.event, callback.callback);
     if (_offEvents.containsKey(key)) return _offEvent;
     var callbacks = _callbacks[event];
     if (callbacks == null) {
-      callbacks = new List<_ICallback>();
+      callbacks = new Set<_ICallback>();
       _callbacks[event] = callbacks;
     }
     callbacks.add(callback);
@@ -353,27 +344,18 @@ class EventBus {
 
   void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>([E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9]) {
     // Avoid errors when some callbacks are removed from _callbacks by themselves.
-    _isFiring = true;
-    _callbacks[_Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event)]?.forEach((callback) { 
-      _invoke(callback, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9); 
+    final callbacks = _callbacks[_Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event)]?.toList();
+    callbacks?.forEach((callback) {
+      try {
+        callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+      } catch (exception, stack) {
+        reportError(
+          stack: stack,
+          exception: exception,
+          context: 'when EventBus dispatches events'
+        );
+      }
     });
-    _isFiring = false;
-    while(_removedCallbacksWhenEmitting.isNotEmpty) {
-      final key = _removedCallbacksWhenEmitting.remove(0);
-      _offEvents[key]?.call();
-    }
-  }
-
-  void _invoke(_ICallback callback, event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9) {
-    try {
-      callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
-    } catch (exception, stack) {
-      reportError(
-        stack: stack,
-        exception: exception,
-        context: 'when EventBus dispatches events'
-      );
-    }
   }
 
   static void _debugCheckNullCallback(String methodName, Function callback) {
@@ -462,8 +444,21 @@ class AsyncEmitter {
   Future<void> emitEventWith9Args<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9) async
     => _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
 
-  void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>([E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9]) 
-    => EventBus._singleton._emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+  void _emit<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>([E event, A1 arg1, A2 arg2, A3 arg3, A4 arg4, A5 arg5, A6 arg6, A7 arg7, A8 arg8, A9 arg9]) {
+    // Avoid errors when some callbacks are removed from _callbacks by themselves.
+    final callbacks = $eventBus._callbacks[_Event9<E,A1,A2,A3,A4,A5,A6,A7,A8,A9>(event)]?.toList();
+    callbacks?.forEach((callback) {
+      try {
+        callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+      } catch (exception, stack) {
+        reportError(
+          stack: stack,
+          exception: exception,
+          context: 'when EventBus dispatches events'
+        );
+      }
+    });
+  }
 }
 
 // An OffEvent doing nothing.
