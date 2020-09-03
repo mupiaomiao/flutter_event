@@ -273,7 +273,7 @@ void _invoke<T>(T caller, void callback()) {
   try {
     callback();
   } catch (exception, stack) {
-    reportError(
+    debugReportError(
       stack: stack,
       exception: exception,
       context: 'when $caller dispatches events'

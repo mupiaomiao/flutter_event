@@ -1,8 +1,15 @@
-void reportError({
+void debugReportError({
   String context,
   StackTrace stack,
   dynamic exception
 }) {
+  bool isDebug = true;
+  assert((){
+    isDebug = false;
+    return true;
+  }());
+  if (!isDebug) return;
+  
   var msg = '===| EXCEPTION CAUGHT BY FLUTTER_EVENT |=================================================\r\n';
   msg += 'The following ${exception.runtimeType} was thrown';
   if (context?.isNotEmpty ?? false) msg += ' $context'; 

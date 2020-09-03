@@ -349,7 +349,7 @@ class EventBus {
       try {
         callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
       } catch (exception, stack) {
-        reportError(
+        debugReportError(
           stack: stack,
           exception: exception,
           context: 'when EventBus dispatches events'
@@ -451,7 +451,7 @@ class AsyncEmitter {
       try {
         callback(event, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
       } catch (exception, stack) {
-        reportError(
+        debugReportError(
           stack: stack,
           exception: exception,
           context: 'when EventBus dispatches events'
